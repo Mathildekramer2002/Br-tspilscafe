@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="da">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spilcaféen</title>
+    <link rel="stylesheet" href="app.css" />
+  </head>
+  <body>
+    <!-- Topbar -->
+    <header class="topbar">
+      <button class="icon-btn" id="go-back" aria-label="Tilbage">←</button>
+      <div class="filters-row">
+        <!-- Tre “pill” filtre matcher screenshots: Alder, Spillere, Varighed -->
+        <select id="age-pill" class="pill">
+          <option value="all">Alder</option>
+          <option value="3">3+</option>
+          <option value="6">6+</option>
+          <option value="8">8+</option>
+          <option value="10">10+</option>
+          <option value="12">12+</option>
+          <option value="15">15+</option>
+          <option value="18">18+</option>
+        </select>
+
+        <select id="players-pill" class="pill">
+          <option value="all">Spillere</option>
+          <option value="1-2">1–2</option>
+          <option value="2-4">2–4</option>
+          <option value="4-6">4–6</option>
+          <option value="6-10">6–10</option>
+          <option value="10+">10+</option>
+        </select>
+
+        <select id="duration-pill" class="pill">
+          <option value="all">Varighed</option>
+          <option value="0-15">≤ 15 min</option>
+          <option value="15-30">15–30 min</option>
+          <option value="30-60">30–60 min</option>
+          <option value="60-120">60–120 min</option>
+          <option value="120+">120+ min</option>
+        </select>
+      </div>
+    </header>
+
+    <main class="page">
+      <!-- Søg som i designet -->
+      <div class="searchbar">
+        <input type="text" id="search-input" placeholder="Søg" />
+        <button class="icon-btn" aria-label="Søg">🔍</button>
+      </div>
+
+      <!-- (skjulte/udvidede filtre – valgfrit at bruge) -->
+      <details class="more-filters">
+        <summary>Flere filtre</summary>
+        <div class="filters-grid">
+          <select id="genre-select">
+            <option value="all">Alle kategorier</option>
+          </select>
+          <select id="language-select">
+            <option value="all">Alle sprog</option>
+          </select>
+          <select id="difficulty-select">
+            <option value="all">Alle sværhedsgrader</option>
+          </select>
+
+          <label class="range">
+            <span>Rating fra/til</span>
+            <div class="inputs">
+              <input
+                type="number"
+                id="rating-from"
+                placeholder="0"
+                min="0"
+                max="5"
+                step="0.1"
+              />
+              <input
+                type="number"
+                id="rating-to"
+                placeholder="5"
+                min="0"
+                max="5"
+                step="0.1"
+              />
+            </div>
+          </label>
+
+          <label class="range">
+            <span>Spilletid (min)</span>
+            <div class="inputs">
+              <input
+                type="number"
+                id="playtime-from"
+                placeholder="0"
+                min="0"
+                max="600"
+              />
+              <input
+                type="number"
+                id="playtime-to"
+                placeholder="999"
+                min="0"
+                max="999"
+              />
+            </div>
+          </label>
+
+          <label class="range">
+            <span>Kun ledige</span>
+            <input type="checkbox" id="available-only" />
+          </label>
+
+          <select id="sort-select">
+            <option value="none">Ingen sortering</option>
+            <option value="title">Titel (A-Å)</option>
+            <option value="playtime">Varighed (kortest først)</option>
+            <option value="rating">Rating (højeste først)</option>
+          </select>
+
+          <button id="clear-filters" class="clear-btn">🗑️ Ryd filtre</button>
+        </div>
+      </details>
+
+      <!-- Grid med spil -->
+      <section id="game-list" class="card-grid"></section>
+    </main>
+
+    <!-- Bundnavigation som i mockup -->
+    <nav class="tabbar">
+      <button class="tab"><span>🎲</span><small>Alle spil</small></button>
+      <button class="tab"><span>🪑</span><small>Reserver bord</small></button>
+      <button class="tab active"><span>🏠</span><small>Hjem</small></button>
+      <button class="tab" id="filter-favourites">
+        <span>❤️</span><small>Favoritter</small>
+      </button>
+      <button class="tab"><span>👤</span><small>Profil</small></button>
+    </nav>
+
+    <footer class="legal">© Spilcaféen • RACE</footer>
+    <script src="app.js"></script>
+  </body>
+</html>
