@@ -12,129 +12,132 @@
     />
   </head>
   <body>
-    <!-- Topbar -->
+   <header> 
+
     <header class="topbar">
-      <button class="icon-btn" id="go-back" aria-label="Tilbage">←</button>
-      <div class="filters-row">
-        <!-- Tre “pill” filtre matcher screenshots: Alder, Spillere, Varighed -->
-        <select id="age-pill" class="pill">
-          <option value="all">Alder</option>
-          <option value="3">3+</option>
-          <option value="6">6+</option>
-          <option value="8">8+</option>
-          <option value="10">10+</option>
-          <option value="12">12+</option>
-          <option value="15">15+</option>
-          <option value="18">18+</option>
-        </select>
+      <!-- Øverste mørkebrune bjælke -->
+      <div class="topbar-bar"></div>
 
-        <select id="players-pill" class="pill">
-          <option value="all">Spillere</option>
-          <option value="1-2">1–2</option>
-          <option value="2-4">2–4</option>
-          <option value="4-6">4–6</option>
-          <option value="6-10">6–10</option>
-          <option value="10+">10+</option>
-        </select>
+  <img
+    src="https://images.squarespace-cdn.com/content/v1/61fd2c9026a58c435d260f4c/1af90772-e642-4309-a2cb-f4161e36855e/SC-logo-2023-transparant-BG+Small+Crop.png"
+    alt="Spilcaféen logo" class="header-logo" />
 
-        <select id="duration-pill" class="pill">
-          <option value="all">Varighed</option>
-          <option value="0-15">≤ 15 min</option>
-          <option value="15-30">15–30 min</option>
-          <option value="30-60">30–60 min</option>
-          <option value="60-120">60–120 min</option>
-          <option value="120+">120+ min</option>
-        </select>
-      </div>
-    </header>
+   </header>
+   
 
     <!-- BOOKING FLOW (skjult indtil man trykker "Reserver bord") -->
 <section id="booking-view" class="booking" hidden>
-  <header class="booking-top">
-    <button class="icon-btn" id="booking-back" aria-label="Tilbage">←</button>
-    <img src="https://images.squarespace-cdn.com/content/v1/61fd2c9026a58c435d260f4c/1af90772-e642-4309-a2cb-f4161e36855e/SC-logo-2023-transparant-BG+Small+Crop.png" alt="Spilcaféen" class="booking-logo">
-  </header>
-
-  <div id="booking-stage" class="booking-stage"><!-- step content her --></div>
+  <div id="booking-stage" class="booking-stage"></div>
 </section>
 
-    <main class="page">
-      <!-- Søg som i designet -->
-      <div class="searchbar">
-        <input type="text" id="search-input" placeholder="Søg" />
-        <button class="icon-btn" aria-label="Søg">🔍</button>
+  <main class="page">
+    <!-- Søg som i designet -->
+    <div class="searchbar">
+      <input type="text" id="search-input" placeholder="Søg" />
+      <button class="icon-btn" aria-label="Søg">🔍</button>
+    </div>
+  
+    <!-- 👇 NY placering af filtre + Ryd filtre -->
+    <div class="filterbar">
+      <div class="filters-row">
+        <!-- alle dine filter-dropdowns flyttes herned -->
+        <div class="filter-dropdown">
+          <button class="pill">Kategori ⌄</button>
+          <div class="dropdown-menu">
+            <button data-filter="genre" data-value="Familie">Familie</button>
+            <button data-filter="genre" data-value="Kortspil">Kortspil</button>
+            <button data-filter="genre" data-value="Strategi">Strategi</button>
+            <button data-filter="genre" data-value="Ordspil">Ordspil</button>
+            <button data-filter="genre" data-value="Party">Party</button>
+            <button data-filter="genre" data-value="Andre">Andre</button>
+            <button data-filter="genre" data-value="all">Alle kategorier</button>
+          </div>
+        </div>
+  
+        <div class="filter-dropdown">
+          <button class="pill">Spillere ⌄</button>
+          <div class="dropdown-menu">
+            <button data-filter="players" data-value="1-2">1–2</button>
+            <button data-filter="players" data-value="2-4">2–4</button>
+            <button data-filter="players" data-value="4-6">4–6</button>
+            <button data-filter="players" data-value="6-10">6–10</button>
+            <button data-filter="players" data-value="10+">10+</button>
+            <button data-filter="players" data-value="all">Alle</button>
+          </div>
+        </div>
+  
+        <div class="filter-dropdown">
+          <button class="pill">Alder ⌄</button>
+          <div class="dropdown-menu">
+            <button data-filter="age" data-value="3">3+</button>
+            <button data-filter="age" data-value="6">6+</button>
+            <button data-filter="age" data-value="8">8+</button>
+            <button data-filter="age" data-value="10">10+</button>
+            <button data-filter="age" data-value="12">12+</button>
+            <button data-filter="age" data-value="15">15+</button>
+            <button data-filter="age" data-value="18">18+</button>
+            <button data-filter="age" data-value="all">Alle</button>
+          </div>
+        </div>
+  
+        <div class="filter-dropdown">
+          <button class="pill">Varighed ⌄</button>
+          <div class="dropdown-menu">
+            <button data-filter="duration" data-value="0-15">≤ 15 min</button>
+            <button data-filter="duration" data-value="15-30">15–30 min</button>
+            <button data-filter="duration" data-value="30-60">30–60 min</button>
+            <button data-filter="duration" data-value="60-120">60–120 min</button>
+            <button data-filter="duration" data-value="120+">120+ min</button>
+            <button data-filter="duration" data-value="all">Alle</button>
+          </div>
+        </div>
+  
+        <div class="filter-dropdown"><button class="pill" data-sort="rating">Populære</button></div>
+        <div class="filter-dropdown"><button class="pill" data-sort="title">A–Å</button></div>
+        <div class="filter-dropdown"><button class="pill" data-sort="none">Nyeste</button></div>
+      </div>
+  
+      <!-- højre side -->
+      <button class="clear-pill" id="clear-filters-pill" type="button">Ryd filtre</button>
+    </div>
+  
+    <!-- resten af indholdet -->
+    <section id="game-list" class="card-grid"></section>
+  </main>
+
+    
+
+      <!-- Skjult lager til select/inputs som koden bruger (ikke synligt for brugeren) -->
+      <div class="filters-storage" hidden>
+        <select id="genre-select">
+          <option value="all">Alle kategorier</option>
+        </select>
+        <select id="language-select">
+          <option value="all">Alle sprog</option>
+        </select>
+        <select id="difficulty-select">
+          <option value="all">Alle sværhedsgrader</option>
+        </select>
+      
+        <input type="number" id="rating-from" placeholder="0" min="0" max="5" step="0.1" />
+        <input type="number" id="rating-to" placeholder="5" min="0" max="5" step="0.1" />
+      
+        <input type="number" id="playtime-from" placeholder="0" min="0" max="600" />
+        <input type="number" id="playtime-to" placeholder="999" min="0" max="999" />
+      
+        <input type="checkbox" id="available-only" />
+      
+        <select id="sort-select">
+          <option value="none">Ingen sortering</option>
+          <option value="title">Titel (A-Å)</option>
+          <option value="playtime">Varighed (kortest først)</option>
+          <option value="rating">Rating (højeste først)</option>
+        </select>
+      
+        <!-- eksisterende clear-knap er ikke længere synlig, men kan gerne blive -->
+        <button id="clear-filters" type="button">Ryd (skjult)</button>
       </div>
 
-      <!-- (skjulte/udvidede filtre – valgfrit at bruge) -->
-      <details class="more-filters">
-        <summary>Flere filtre</summary>
-        <div class="filters-grid">
-          <select id="genre-select">
-            <option value="all">Alle kategorier</option>
-          </select>
-          <select id="language-select">
-            <option value="all">Alle sprog</option>
-          </select>
-          <select id="difficulty-select">
-            <option value="all">Alle sværhedsgrader</option>
-          </select>
-
-          <label class="range">
-            <span>Rating fra/til</span>
-            <div class="inputs">
-              <input
-                type="number"
-                id="rating-from"
-                placeholder="0"
-                min="0"
-                max="5"
-                step="0.1"
-              />
-              <input
-                type="number"
-                id="rating-to"
-                placeholder="5"
-                min="0"
-                max="5"
-                step="0.1"
-              />
-            </div>
-          </label>
-
-          <label class="range">
-            <span>Spilletid (min)</span>
-            <div class="inputs">
-              <input
-                type="number"
-                id="playtime-from"
-                placeholder="0"
-                min="0"
-                max="600"
-              />
-              <input
-                type="number"
-                id="playtime-to"
-                placeholder="999"
-                min="0"
-                max="999"
-              />
-            </div>
-          </label>
-
-          <label class="range">
-            <span>Kun ledige</span>
-            <input type="checkbox" id="available-only" />
-          </label>
-
-          <select id="sort-select">
-            <option value="none">Ingen sortering</option>
-            <option value="title">Titel (A-Å)</option>
-            <option value="playtime">Varighed (kortest først)</option>
-            <option value="rating">Rating (højeste først)</option>
-          </select>
-
-          <button id="clear-filters" class="clear-btn">🗑️ Ryd filtre</button>
-        </div>
       </details>
 
       <!-- Grid med spil -->
@@ -142,25 +145,33 @@
     </main>
 
 <!-- Modal: stort kort -->
+<!-- Modal: stort kort -->
 <div id="game-modal" class="modal" hidden>
   <div class="modal-backdrop" data-close></div>
   <article class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <button class="modal-close" data-close aria-label="Luk">×</button>
+
     <div class="modal-media">
       <img id="modal-image" alt="">
     </div>
+
     <div class="modal-body">
       <h2 id="modal-title"></h2>
       <div class="modal-meta" id="modal-meta"></div>
       <p id="modal-desc"></p>
       <div class="modal-details" id="modal-details"></div>
-      <details id="modal-rules-wrap" class="modal-rules" hidden>
-        <summary>Regler</summary>
-        <pre id="modal-rules"></pre>
-      </details>
+
+      <!-- NY REGELSEKTION -->
+      <section id="modal-rules-wrap" class="modal-rules" hidden>
+        <button id="rules-toggle" class="rules-btn" aria-expanded="false">▸ Regler</button>
+        <div id="rules-content" class="rules-content">
+          <pre id="modal-rules"></pre>
+        </div>
+      </section>
     </div>
   </article>
 </div>
+
 
 
 

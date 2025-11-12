@@ -1,41 +1,79 @@
-/* ---------- Farver & base ---------- */
+/* =========================================================
+   Farver, base og variabler
+   ========================================================= */
 :root {
-  --cream: #f5ebdc; /* baggrund */
-  --brown: #41120c; /* mørk bar/kort */
-  --brown-2: #5b2a1a; /* kort-dybde */
+  --cream: #f5ebdc;
+  --brown: #41120c;
+  --brown-2: #5b2a1a;
   --text: #2b1a14;
   --light: #fff8f0;
   --muted: #bdaaa1;
   --ring: #d9c9bf;
-  --shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  --shadow: 0 8px 20px rgba(0, 0, 0, .15);
   --radius: 18px;
+  --thumb-ratio: 4/3;
 }
 
 * {
   box-sizing: border-box;
 }
+
 html,
 body {
   margin: 0;
   padding: 0;
 }
+
+
+/* baggrundsfarve */
 body {
+
   background: var(--cream);
   color: var(--text);
   font: 16px/1.4 ui-sans-serif, system-ui, Segoe UI, Roboto, Inter;
 }
 
-/* ---------- Topbar + filter-pills ---------- */
+/* =========================================================
+   HEADER – mørk topbjælke + svævende logo
+   ========================================================= */
 .topbar {
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 3000;
+  background: var(--cream);
+  padding-top: 100px;
+  /* plads til logoet ovenfor bjælken */
+  padding-bottom: 28px;
+  /* luft under bjælken (afstand til søg) */
+  margin: 0 0 16px;
+  overflow: visible;
+}
+
+/* Selve bjælken: absolut, så padding ikke skubber den */
+.topbar-bar {
+  position: absolute;
+  inset: 0 auto auto 0;
+  height: 68px;
+  width: 100%;
   background: var(--brown);
-  color: #fff;
-  padding: 10px 12px 12px;
   border-bottom-left-radius: 16px;
   border-bottom-right-radius: 16px;
+  box-shadow: var(--shadow);
 }
+
+/* Logoet svæver ovenpå bjælken */
+.header-logo {
+  position: absolute;
+  left: 50%;
+  top: 6px;
+  /* sænk/hæv logoet i bjælken */
+  transform: translateX(-50%);
+  height: 96px;
+  /* logo-størrelse */
+  z-index: 10;
+}
+
+/* tilbage-knap i topbaren */
 .icon-btn {
   appearance: none;
   border: 0;
@@ -46,30 +84,18 @@ body {
   padding: 4px 6px;
   cursor: pointer;
 }
-.filters-row {
-  margin-top: 6px;
-  display: flex;
-  gap: 8px;
-  overflow: auto;
-  padding-bottom: 4px;
-}
-.pill {
-  -webkit-appearance: none;
-  appearance: none;
-  background: #65301e;
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 999px;
-  padding: 8px 14px;
-  font-weight: 600;
-}
 
-/* ---------- Søg ---------- */
+/* =========================================================
+   SIDE-INDHOLD
+   ========================================================= */
 .page {
-  padding: 12px 14px 84px;
-  max-width: 480px;
+  padding: 12px 14px 110px;
+  /* ekstra bund-padding så tabbar ikke dækker */
+  max-width: min(1400px, 100%);
   margin: 0 auto;
 }
+
+/* Søg-bar */
 .searchbar {
   display: flex;
   align-items: center;
@@ -81,6 +107,7 @@ body {
   padding: 8px 12px;
   margin: 10px 0 8px;
 }
+
 .searchbar input {
   flex: 1;
   border: 0;
@@ -89,59 +116,166 @@ body {
   font-size: 16px;
 }
 
-/* ---------- Flere filtre (skjult som default) ---------- */
-.more-filters {
-  margin: 4px 0 10px;
-}
-.more-filters > summary {
-  list-style: none;
-  cursor: pointer;
-  user-select: none;
-  background: #fff;
-  border: 1px solid var(--ring);
-  border-radius: 12px;
-  padding: 10px 12px;
-  font-weight: 600;
-}
-.more-filters[open] > summary {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-.filters-grid {
-  background: #fff;
-  border: 1px solid var(--ring);
-  border-top: 0;
-  border-bottom-left-radius: 12px;
-  border-bottom-right-radius: 12px;
-  padding: 12px;
-  display: grid;
-  gap: 10px;
-}
-.filters-grid select,
-.filters-grid input[type="number"],
-.clear-btn {
-  width: 100%;
-  padding: 10px 12px;
-  border-radius: 12px;
-  border: 1px solid var(--ring);
-  background: #fff;
-}
-.range .inputs {
+/* =========================================================
+   FILTRE under søg – venstre/scroll, “Ryd filtre” til højre
+   ========================================================= */
+.filterbar {
   display: flex;
+  align-items: center;
   gap: 8px;
-}
-.clear-btn {
-  background: #f7efe7;
-  cursor: pointer;
+  margin: 10px 0 14px;
 }
 
-/* ---------- Kort ---------- */
+.filterbar .filters-row {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  overflow-y: visible;
+  padding-bottom: 4px;
+}
+
+/* Standard “pill”-stil (bruges også i dropdown-trigger-knapper) */
+.pill {
+  appearance: none;
+  background: #65301e;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, .15);
+  border-radius: 999px;
+  padding: 10px 16px;
+  /* lidt større */
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform .18s ease, background-color .18s ease, box-shadow .18s ease;
+  will-change: transform;
+  transform-origin: center;
+}
+
+.pill:hover,
+.pill:focus-visible,
+.pill:active {
+  transform: scale(1.07);
+  background: var(--brown-2);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, .18);
+}
+
+.pill:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, .6);
+  outline-offset: 2px;
+}
+
+/* Dropdown trigger-pills lys stil */
+.filter-dropdown {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.filter-dropdown .pill {
+  background: var(--brown);
+  color: var(--ring);
+  border: 1px solid rgba(0, 0, 0, .25);
+}
+
+.filter-dropdown .pill:hover {
+  background: var(--brown-2);
+  transform: scale(1.07);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, .18);
+}
+
+/* Dropdown-menu */
+.dropdown-menu {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  display: none;
+  flex-direction: column;
+  min-width: 180px;
+  background: #f5ebdc;
+  border: 1px solid rgba(0, 0, 0, .25);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  z-index: 3200;
+  overflow: hidden;
+}
+
+.filter-dropdown.open .dropdown-menu {
+  display: flex;
+}
+
+.dropdown-floating {
+  position: fixed !important;
+  z-index: 10000 !important;
+  display: flex !important;
+  top: 0;
+  left: 0;
+}
+
+/* Punkter i dropdown-menuen + hover-pop */
+.dropdown-menu button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 15px;
+  color: var(--text);
+  cursor: pointer;
+  transition: transform .15s ease, background-color .15s ease;
+  display: inline-block;
+  transform-origin: center;
+}
+
+.dropdown-menu button:hover {
+  transform: scale(1.08);
+  background: var(--brown-2);
+  color: #fff;
+}
+
+/* “Ryd filtre”-pillen på højre side */
+.clear-pill {
+  flex: 0 0 auto;
+  background: var(--brown);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, .2);
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-weight: 800;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform .2s ease, background-color .2s ease, box-shadow .2s ease;
+}
+
+.clear-pill:hover {
+  transform: scale(1.08);
+  background: var(--brown-2);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, .18);
+}
+
+/* Skjul evt. gamle rækker hvis de findes i DOM’en */
+.top-actions {
+  display: none !important;
+}
+
+.more-filters {
+  display: none !important;
+}
+
+.filters-storage[hidden] {
+  display: none;
+}
+
+/* =========================================================
+   KORT / SPIL-KORT
+   ========================================================= */
 .card-grid {
   display: grid;
   gap: 12px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
 }
-@media (max-width: 380px) {
+
+@media (max-width:380px) {
   .card-grid {
     grid-template-columns: 1fr;
   }
@@ -153,33 +287,37 @@ body {
   border-radius: 16px;
   box-shadow: var(--shadow);
   padding: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, .12);
 }
+
 .thumb {
   position: relative;
   border-radius: 12px;
   overflow: hidden;
-  background: #2b2b2b;
-  aspect-ratio: 4/3;
+  background: #00000055;
+  aspect-ratio: var(--thumb-ratio);
 }
+
 .thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
+
 .fav {
   position: absolute;
   top: 8px;
   right: 8px;
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(0, 0, 0, .35);
+  border: 1px solid rgba(255, 255, 255, .25);
   color: #fff;
   border-radius: 999px;
   padding: 6px 8px;
   font-size: 16px;
   cursor: pointer;
 }
+
 .fav.active {
   background: #fff;
   color: #c0183c;
@@ -189,19 +327,22 @@ body {
   margin: 8px 4px 6px;
   font-size: 16px;
 }
+
 .meta,
 .extra {
   color: #f1dfd6;
-  opacity: 0.95;
+  opacity: .95;
   display: flex;
   gap: 10px;
   margin: 0 4px 4px;
   font-size: 14px;
 }
+
 .extra {
   flex-direction: column;
   gap: 2px;
 }
+
 .badges {
   position: absolute;
   left: 8px;
@@ -209,46 +350,108 @@ body {
   display: flex;
   gap: 6px;
 }
+
 .badge {
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, .5);
   color: #fff;
   padding: 3px 6px;
   font-size: 12px;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, .25);
 }
 
-/* ---------- Tabbar ---------- */
+/* =========================================================
+   TABBAR – altid klikbar, hover-effekt, alle lige store
+   ========================================================= */
 .tabbar {
   position: fixed;
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 10;
+  z-index: 8000;
+  /* OVER alt almindeligt indhold/booking */
   background: #efd8c6e6;
   backdrop-filter: saturate(1.2) blur(6px);
   border-top: 1px solid #e2cfc3;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  padding: 8px 6px;
+  padding: 10px 8px;
+  /* lidt større samlet højde */
 }
-.tab {
+
+/* Gør ALLE knapper ens (inkl. huset) */
+.tabbar button {
   appearance: none;
-  background: transparent;
   border: 0;
-  text-align: center;
+  background: transparent;
   color: #7b5647;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 10px 4px;
+  /* lidt større */
+  font-size: 15px;
+  /* større tekst */
+  outline: 0;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform .18s ease, background-color .18s ease, color .18s ease, box-shadow .18s ease;
+  border-radius: 12px;
+  /* rundet baggrund ved hover */
 }
-.tab small {
+
+/* Ikon + label */
+.tabbar button span {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.tabbar button small {
   display: block;
-  font-size: 11px;
+  font-size: 12px;
 }
-.tab.active {
+
+/* Aktiv tilstand */
+.tabbar .tab.active {
   color: #3b2118;
   font-weight: 700;
 }
 
-/* ---------- Footer ---------- */
+.tabbar .tab.active::after {
+  content: "";
+  width: 24px;
+  height: 3px;
+  background: #3b2118;
+  border-radius: 999px;
+  margin-top: 4px;
+}
+
+/* Konsistent hover/focus på ALLE knapper inkl. huset */
+.tabbar button:hover,
+.tabbar button:focus-visible,
+.tabbar button:active {
+  transform: scale(1.08);
+  background: rgba(0, 0, 0, .05);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, .12);
+}
+
+
+/* Tilgængelighed – undgå grimme outlines men behold fokus */
+.tabbar button:focus-visible {
+  outline: 2px solid rgba(59, 33, 24, .35);
+  outline-offset: 2px;
+}
+
+/* Sørg for at modaler fortsat ligger OVER tabbaren */
+.modal {
+  z-index: 9000;
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
 .legal {
   text-align: center;
   color: #9b8479;
@@ -256,105 +459,48 @@ body {
   padding: 10px 0 80px;
 }
 
-.page {
-  padding: 12px 14px 100px;
-  max-width: min(1400px, 100%);
-  margin: 0 auto;
-}
-
-.card-grid {
-  display: grid;
-  gap: 12px;
-  /* min-bredden pr. kort: justér tallet (fx 220px → større kort) */
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-}
-:root {
-  /* ... dine farver ... */
-  --thumb-ratio: 4/3; /* mobil/tablet standard */
-}
-
-/* Billedramme */
-.thumb {
-  position: relative;
-  border-radius: 12px;
-  overflow: hidden;
-  background: #00000055;
-  aspect-ratio: var(--thumb-ratio);
-}
-.thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* beskær pænt uden forvrængning */
-  display: block;
-}
-@media (min-width: 768px) {
-  .card-grid {
-    gap: 14px;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  }
-}
-
-@media (min-width: 1200px) {
-  :root {
-    --thumb-ratio: 3/4;
-  } /* lidt højere kort på desktop */
-  .card-grid {
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  }
-}
-@media (min-width: 1600px) {
-  .page {
-    max-width: min(1600px, 100%);
-  }
-  .card-grid {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  }
-}
-
-/* ===== Modal / Big Card ===== */
+/* =========================================================
+   MODAL (kortdetaljer)
+   ========================================================= */
 .modal[hidden] {
   display: none;
 }
+
 .modal {
   position: fixed;
   inset: 0;
-  z-index: 50;
   display: grid;
   place-items: center;
   padding: 16px;
 }
+
 .modal-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.122);
 }
+
 .modal-card {
   position: relative;
   z-index: 1;
-  width: min(920px, 100%);
   background: var(--brown);
   color: #fff;
   border-radius: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, .15);
   box-shadow: var(--shadow);
+  width: min(920px, 100%);
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
   overflow: hidden;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-@media (max-width: 720px) {
-  .modal-card {
-    grid-template-columns: 1fr;
-    max-height: 90vh;
-    overflow: auto;
-  }
 }
 
 .modal-close {
   position: absolute;
   top: 10px;
   right: 10px;
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(0, 0, 0, .35);
+  border: 1px solid rgba(255, 255, 255, .25);
   color: #fff;
   border-radius: 999px;
   font-size: 22px;
@@ -364,115 +510,187 @@ body {
 }
 
 .modal-media {
-  aspect-ratio: 4/3;
-  background: #2b2b2b;
+  flex: 0 0 auto;
+  background: #1a1a1a7b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: .5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, .1);
 }
+
 .modal-media img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  max-height: 350px;
+  object-fit: contain;
   display: block;
 }
 
 .modal-body {
-  padding: 14px 16px 18px;
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 1.5rem;
   display: grid;
   gap: 10px;
 }
+
 .modal-body h2 {
   margin: 0;
   font-size: clamp(20px, 3.2vw, 28px);
 }
+
 .modal-meta {
   display: flex;
   gap: 14px;
-  opacity: 0.95;
+  opacity: .95;
+  flex-wrap: wrap;
 }
+
 .modal-details {
   display: grid;
   gap: 6px;
 }
+
 .modal-details span {
-  display: inline-block;
-  opacity: 0.95;
-}
-.modal-rules {
-  background: #5b2a1a;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 12px;
-  padding: 8px 10px;
-}
-.modal-rules pre {
-  margin: 6px 0 0;
-  white-space: pre-wrap;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  opacity: .95;
 }
 
-.tab.active {
-  background: var(--brown);
+/* Regler fold-ud */
+.rules-btn {
+  background: none;
+  border: none;
   color: #fff;
-  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  gap: .25rem;
+  font-size: 1.1rem;
+  transition: color .2s ease;
 }
 
-/* ===== Booking flow ===== */
+.rules-btn:hover {
+  color: #ffd479;
+}
+
+.rules-btn[aria-expanded="true"]::before {
+  content: "▾";
+}
+
+.rules-btn[aria-expanded="false"]::before {
+  content: "▸";
+}
+
+.rules-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .3s ease;
+}
+
+.rules-content.open {
+  max-height: 600px;
+}
+
+#modal-rules {
+  background: rgba(255, 255, 255, .05);
+  padding: .75rem;
+  border-radius: 6px;
+  white-space: pre-wrap;
+  line-height: 1.4;
+  margin-top: .5rem;
+}
+
+/* =========================================================
+   BOOKING FLOW (forkortet; bevaret funktionelt)
+   ========================================================= */
 .booking[hidden] {
   display: none;
 }
+
 .booking {
-  max-width: 480px;
+  position: relative;
+  /* sikrer normal stacking under tabbar */
+  max-width: clamp(600px, 90vw, 1100px);
   margin: 0 auto;
-  padding: 10px 14px 90px;
+  padding: 20px 16px 120px;
+  /* bund-padding så tabbar ikke dækker */
 }
+
 .booking-top {
   display: flex;
   align-items: center;
   gap: 10px;
   margin-bottom: 8px;
 }
+
 .booking-logo {
-  height: 40px;
-  margin-left: auto;
-  margin-right: auto;
+  height: 56px;
   display: block;
+  margin: 10px auto 8px;
+}
+
+@media (min-width:900px) {
+  .booking-logo {
+    height: 80px;
+    margin: 14px auto 10px;
+  }
 }
 
 .booking-title {
-  font-size: 22px;
-  font-weight: 700;
-  margin: 10px 0 12px;
+  font-size: clamp(22px, 3vw, 32px);
+  font-weight: 800;
+  text-align: center;
+  margin: 10px 0 16px;
   color: #3b2118;
 }
+
+.booking-stage {
+  display: block;
+}
+
 .booking-grid {
   display: grid;
-  gap: 12px;
+  gap: 16px;
 }
+
 .booking-cafes {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
+
 .booking-card {
   background: var(--brown);
   color: #fff;
   border-radius: 14px;
   padding: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, .12);
   box-shadow: var(--shadow);
   cursor: pointer;
 }
+
 .booking-card img {
   width: 100%;
-  height: 96px;
+  height: 120px;
   object-fit: cover;
   border-radius: 10px;
   display: block;
 }
-.booking-card h4 {
-  margin: 8px 4px 2px;
-  font-size: 16px;
+
+@media (min-width:900px) {
+  .booking-cafes {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .booking-card img {
+    height: 150px;
+  }
 }
-.booking-card p {
-  margin: 0 4px 6px;
-  font-size: 13px;
-  opacity: 0.9;
+
+@media (min-width:1200px) {
+  .booking-cafes {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 
 .booking-bubbles {
@@ -480,24 +698,31 @@ body {
   grid-template-columns: repeat(4, 1fr);
   gap: 12px;
 }
+
 .bubble {
   background: #5b2a1a;
   color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, .15);
   border-radius: 999px;
   padding: 16px 0;
   text-align: center;
-  font-weight: 700;
+  font-weight: 800;
   cursor: pointer;
+  font-size: 18px;
 }
 
-.booking-date,
-.booking-time,
-.booking-type,
-.booking-form {
+.booking-time {
   display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 12px;
 }
+
+@media (min-width:900px) {
+  .booking-time {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
 .slot {
   padding: 10px 12px;
   border-radius: 12px;
@@ -506,15 +731,46 @@ body {
   text-align: center;
   cursor: pointer;
 }
+
 .slot.busy {
-  opacity: 0.45;
+  opacity: .45;
   pointer-events: none;
   text-decoration: line-through;
 }
+
 .slot.primary {
   background: var(--brown);
   color: #fff;
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, .2);
+}
+
+.booking-type {
+  display: grid;
+  gap: 10px;
+}
+
+.booking-form {
+  display: grid;
+  gap: 10px;
+}
+
+.booking-form input,
+.booking-form textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--ring);
+  background: #fff;
+}
+
+.booking-btn {
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--brown);
+  color: #fff;
+  border: 0;
+  cursor: pointer;
+  font-weight: 800;
 }
 
 .booking-summary {
@@ -523,136 +779,26 @@ body {
   border-radius: 12px;
   padding: 10px 12px;
 }
-.booking-btn {
-  padding: 12px;
-  border-radius: 12px;
-  background: var(--brown);
-  color: #fff;
-  border: 0;
-  cursor: pointer;
-  font-weight: 700;
-}
-.booking-muted {
-  color: #7b5647;
-  font-size: 13px;
-}
 
 .booking-success {
   display: grid;
   gap: 12px;
   text-align: center;
 }
+
 .success-big {
   font-size: 22px;
   font-weight: 800;
   color: #3b2118;
 }
 
-/* --- Tabbar: tilbage til “før”-stilen --- */
-.tabbar {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 10;
-  background: #efd8c6e6; /* lys, let translucens */
-  backdrop-filter: saturate(1.2) blur(6px);
-  border-top: 1px solid #e2cfc3;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  padding: 8px 6px;
-}
+/* Respektér brugere der ikke vil have animationer */
+@media (prefers-reduced-motion: reduce) {
 
-/* knapperne */
-.tab {
-  appearance: none;
-  background: transparent; /* ingen pille */
-  border: 0;
-  text-align: center;
-  color: #7b5647; /* normal farve */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  padding: 6px 4px;
+  .pill,
+  .clear-pill,
+  .dropdown-menu button,
+  .tabbar button {
+    transition: none !important;
+  }
 }
-
-/* ikon + label */
-.tab span {
-  font-size: 18px;
-  line-height: 1;
-}
-.tab small {
-  display: block;
-  font-size: 11px;
-}
-
-/* aktiv fane: kun mørkere tekst (ingen baggrund) */
-.tabbar .tab.active {
-  color: #3b2118;
-  font-weight: 700;
-  background: transparent !important; /* overstyr evt. tidligere pille */
-  border-radius: 0 !important;
-  box-shadow: none !important;
-}
-
-/* (valgfrit) lille indikator under aktiv fane */
-.tabbar .tab.active::after {
-  content: "";
-  width: 22px;
-  height: 3px;
-  background: #3b2118;
-  border-radius: 999px;
-  margin-top: 4px;
-}
-
-
-/* Fjerner hvid kant / fokusglød omkring midterknappen */
-.tabbar button:focus,
-.tabbar .tab:focus,
-#tab-home:focus {
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-/* Sørg for, at midterknappen (hjem) har samme baggrund som de andre */
-#tab-home {
-  background: transparent !important;
-  border: none !important;
-}
-
-/* Hvis du har lavet den som en rund knap (FAB-style) */
-#tab-home {
-  box-shadow: none !important;
-  outline: none !important;
-}
-
-/* Hvis der stadig vises en lys baggrund på SVG/ikon */
-#tab-home svg,
-#tab-home img {
-  background: transparent !important;
-}
-
-
-/* Modal */
-.modal[hidden]{display:none;}
-.modal{position:fixed; inset:0; z-index:50; display:grid; place-items:center; padding:16px;}
-.modal-backdrop{position:absolute; inset:0; background:rgba(0,0,0,.45);}
-.modal-card{
-  position:relative; z-index:1; width:min(920px,100%);
-  background:var(--brown); color:#fff; border-radius:18px;
-  border:1px solid rgba(255,255,255,.15); box-shadow:0 16px 40px rgba(0,0,0,.35);
-  overflow:hidden; display:grid; grid-template-columns: 1fr 1fr;
-}
-@media (max-width:720px){ .modal-card{ grid-template-columns:1fr; max-height:90vh; overflow:auto; } }
-.modal-close{ position:absolute; top:10px; right:10px; background:rgba(0,0,0,.35); border:1px solid rgba(255,255,255,.25);
-  color:#fff; border-radius:999px; font-size:22px; line-height:1; padding:6px 10px; cursor:pointer; }
-.modal-media{ aspect-ratio:4/3; background:#2b2b2b; }
-.modal-media img{ width:100%; height:100%; object-fit:cover; display:block; }
-.modal-body{ padding:14px 16px 18px; display:grid; gap:10px; }
-.modal-body h2{ margin:0; font-size:clamp(20px,3.2vw,28px); }
-.modal-meta{ display:flex; gap:14px; opacity:.95; flex-wrap:wrap; }
-.modal-details{ display:grid; gap:6px; }
-.modal-details span{ opacity:.95; }
-.modal-rules{ background:#5B2A1A; border:1px solid rgba(255,255,255,.15); border-radius:12px; padding:8px 10px; }
-.modal-rules pre{ margin:6px 0 0; white-space:pre-wrap; font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
